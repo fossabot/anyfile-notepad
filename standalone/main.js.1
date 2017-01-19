@@ -1,0 +1,36 @@
+const electronGoogleOauth = require('electron-google-oauth')
+
+  const browserWindowParams = {
+      'use-content-size': true,
+      center: true,
+      show: false,
+      resizable: false,
+      'always-on-top': true,
+      'standard-window': true,
+      'auto-hide-menu-bar': true,
+      'node-integration': false
+  };
+
+  const googleOauth = electronGoogleOauth(browserWindowParams);
+
+  ( async () => {
+
+    // retrieve  authorization code only
+    const authCode = await googleOauth.getAuthorizationCode(
+      ['https://www.google.com/m8/feeds'],
+      'your-client-id',
+      'your-client-secret',
+      'your-redirect-uri'
+    );
+    console.dir(authCode);
+
+    // retrieve access token and refresh token
+    const result = await googleOauth.getAccessToken(
+      ['https://www.google.com/m8/feeds'],
+      'your-client-id',
+      'your-client-secret',
+      'your-redirect-uri'
+    );
+    console.dir(result);
+
+  })();
