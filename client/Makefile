@@ -1,3 +1,16 @@
+dist.tgz:
+	make dist
+	echo "Press any key to launch archive build." && read dummy
+	tar  -cvzf dist.tgz dist/
+
+dist:
+	mkdir dist
+	AFN_BUILD_DIR=dist/ bash afn-app.sh
+
+clean:
+	rm -fr dist
+	rm -fr fully-static/
+	rm -f client-dist.tgz
 
 .PHONY : extract-i18n-strings
 

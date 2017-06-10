@@ -99,14 +99,14 @@ function pages_css() {
   
   if should_reset; then
     echo "Resetting pages.css"
-    rm -f client/assets/css/libs/bootstrap.min.css.scss
+    rm -f assets/css/libs/bootstrap.min.css.scss
     rm -f $COMPILED_APP/assets/pages-*.css
   fi
 
-  cp bower_components/bootstrap/dist/css/bootstrap.min.css client/assets/css/libs/bootstrap.min.css.scss
-  ./node_modules/.bin/node-sass --include-path client/assets/css/ client/assets/css/pages.css.scss >> $COMPILED_APP/assets/pages-$APP_VERSION_ID.css
+  cp bower_components/bootstrap/dist/css/bootstrap.min.css assets/css/libs/bootstrap.min.css.scss
+  ./node_modules/.bin/node-sass --include-path assets/css/ assets/css/pages.css.scss >> $COMPILED_APP/assets/pages-$APP_VERSION_ID.css
   
-  rm -f client/assets/css/libs/bootstrap.min.css.scss
+  rm -f assets/css/libs/bootstrap.min.css.scss
 }
 
 function pages() {
@@ -130,7 +130,7 @@ function pages() {
       COLUMNS=1
     fi
 
-    perl -MTemplate -e "\$tt = Template->new({INCLUDE_PATH => ['$COMPILED_APP', 'client/']}) ; \$tt->process('site/layout.tt', {APP_VERSION_ID => '$APP_VERSION_ID', APP_VERSION => '$APP_VERSION', APP_COMMIT_ID => '$APP_COMMIT_ID', PAGE_KEY => '$page', COLUMNS => $COLUMNS}, '$COMPILED_APP/site/$page.html') || die \$tt->error()"
+    perl -MTemplate -e "\$tt = Template->new({INCLUDE_PATH => ['$COMPILED_APP', '.']}) ; \$tt->process('site/layout.tt', {APP_VERSION_ID => '$APP_VERSION_ID', APP_VERSION => '$APP_VERSION', APP_COMMIT_ID => '$APP_COMMIT_ID', PAGE_KEY => '$page', COLUMNS => $COLUMNS}, '$COMPILED_APP/site/$page.html') || die \$tt->error()"
   done 
 
   cp $COMPILED_APP/site/home.html $COMPILED_APP/index.html
@@ -147,7 +147,7 @@ function application_css() {
 
   add_css_asset bower_components/bootstrap/dist/css/bootstrap.min.css $APPLICATION_CSS
   add_css_asset bower_components/tether-shepherd/dist/css/shepherd-theme-default.css $APPLICATION_CSS
-  ./node_modules/.bin/node-sass --include-path client/assets/css/ client/assets/css/editor.css.scss >> $APPLICATION_CSS
+  ./node_modules/.bin/node-sass --include-path assets/css/ assets/css/editor.css.scss >> $APPLICATION_CSS
 
   if ! is_webdev; then
     ./node_modules/.bin/minify $APPLICATION_CSS > `add_min_prefix $APPLICATION_CSS`
@@ -171,17 +171,17 @@ function application_js() {
   add_js_asset bower_components/tether-shepherd/dist/js/tether.js $APPLICATION_JS
   add_js_asset bower_components/tether-shepherd/dist/js/shepherd.min.js $APPLICATION_JS
 
-  add_js_asset client/assets/js/libs/rsvp.min.js $APPLICATION_JS
-  add_js_asset client/assets/js/libs/route-recognizer.js $APPLICATION_JS
-  add_js_asset client/assets/js/DataBinder.js $APPLICATION_JS
-  add_js_asset client/assets/js/Model.js $APPLICATION_JS
-  add_js_asset client/assets/js/Model/Preference.js $APPLICATION_JS
-  add_js_asset client/assets/js/Model/CloudFile.js $APPLICATION_JS
-  add_js_asset client/assets/js/Widget/Preference.js $APPLICATION_JS
-  add_js_asset client/assets/js/helpers.js $APPLICATION_JS
+  add_js_asset assets/js/libs/rsvp.min.js $APPLICATION_JS
+  add_js_asset assets/js/libs/route-recognizer.js $APPLICATION_JS
+  add_js_asset assets/js/DataBinder.js $APPLICATION_JS
+  add_js_asset assets/js/Model.js $APPLICATION_JS
+  add_js_asset assets/js/Model/Preference.js $APPLICATION_JS
+  add_js_asset assets/js/Model/CloudFile.js $APPLICATION_JS
+  add_js_asset assets/js/Widget/Preference.js $APPLICATION_JS
+  add_js_asset assets/js/helpers.js $APPLICATION_JS
 
   # todo - exclude the files above
-  find client/assets/js/ -name '*.js' | while read file; do add_js_asset "$file" $APPLICATION_JS ; done
+  find assets/js/ -name '*.js' | while read file; do add_js_asset "$file" $APPLICATION_JS ; done
 
   if ! is_webdev; then
     ./node_modules/.bin/minify $APPLICATION_JS > `add_min_prefix $APPLICATION_JS`
@@ -199,7 +199,7 @@ function editor_part() {
     rm -f $COMPILED_APP/app.partials
   fi
 
-  find client/ -name '_*.html' | while read file ; do add_template "$file" $COMPILED_APP/app.partials ; done
+  find . -name '_*.html' | while read file ; do add_template "$file" $COMPILED_APP/app.partials ; done
 }
 
 function app() {
@@ -211,13 +211,13 @@ function app() {
     rm -f $COMPILED_APP/app.html
   fi
 
-  cp client/editor-layout.tt $COMPILED_APP/editor-layout.tt
-  perl client/render.pl --COMPILED_APP_DIR=$COMPILED_APP --APP_VERSION_ID=$APP_VERSION_ID --APP_VERSION=$APP_VERSION --APP_COMMIT_ID=$APP_COMMIT_ID --SYNTAX_DB=$COMPILED_APP/syntaxes.json
+  cp editor-layout.tt $COMPILED_APP/editor-layout.tt
+  perl render.pl --COMPILED_APP_DIR=$COMPILED_APP --APP_VERSION_ID=$APP_VERSION_ID --APP_VERSION=$APP_VERSION --APP_COMMIT_ID=$APP_COMMIT_ID --SYNTAX_DB=$COMPILED_APP/syntaxes.json
 }
 
 function public_assets() {
   # Adding public assets
-  cp -frp client/public/* $COMPILED_APP/
+  cp -frp public/* $COMPILED_APP/
 }
 
 function download_if_necessary() {
@@ -297,7 +297,7 @@ function exit_cleanup() {
 trap exit_cleanup EXIT
 start_server
 
-watch_dir client/ build_all &
+watch_dir . build_all &
 
 echo "1" > $SHOULD_RESET_FILE
 
