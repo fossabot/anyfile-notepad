@@ -23,9 +23,9 @@ EXPOSE 8000
 RUN mkdir -p $APACHE_LOCK_DIR
 RUN rm -fr /var/www/html
 
-#RUN git clone https://github.com/julsemaan/anyfile-notepad
-ADD . /tmp/anyfile-notepad
-RUN wget https://gist.githubusercontent.com/julsemaan/3169b51e6451f526e48bc1ca195bc753/raw/36931d69a1a0b408e94507701e63751c02c2256f/afn-build-for-docker.sh
+RUN git clone https://github.com/julsemaan/anyfile-notepad /tmp/anyfile-notepad
+RUN cd /tmp/anyfile-notepad && git checkout feature/docker && cd -
+RUN wget https://gist.githubusercontent.com/julsemaan/3169b51e6451f526e48bc1ca195bc753/raw/19f55dc7a3e64dfd243573baa398656eebb7d003/afn-build-for-docker.sh
 RUN bash afn-build-for-docker.sh
 
 CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]
