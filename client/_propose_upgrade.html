@@ -7,7 +7,11 @@
     <a class="btn btn-primary" href="{{noaction}}" {{{ m-action-n-close "application.popup_upgrade()" }}}>{{ i18n "Upgrade to Anyfile Notepad++" }}</a>
   </div>
 
-  <iframe style="border:none;width:610px;height:340px;" id="upgrade-frame-ad" src="about:blank"></iframe>
+  <hr>
+  <h6>Advertisement</h6>
+  
+  <iframe style="border:none;width:735px;height:100px;" id="upgrade-frame-ad" src="about:blank"></iframe>
+  <hr>
 
   <div class="propose-upgrade-timer">
     <h4>You can continue in <span id="propose-upgrade-seconds-remaining">5</span> seconds</h4>
@@ -15,12 +19,13 @@
       <div class="progress-bar progress-bar-info" style="width:100%"></div>
     </div>
   </div>
-  
+
   {{{ concat "<scr" "ipt>" }}}
-  var doc = document.getElementById('upgrade-frame-ad').contentWindow.document;
+ var doc = document.getElementById('upgrade-frame-ad').contentWindow.document;
   doc.open();
-  doc.write("<html style='overflow-y:hidden'><head><title></title></head><body style='padding:0;margin:0'><scr"+"ipt data-cfasync='false' type='text/javascript' src='//p248374.clksite.com/adServe/banners?tid=248374_474408_10'></scr"+"ipt></body></html>");
+  doc.write("<html style='overflow-y:hidden'><head><title></title></head><body style='padding:0;margin:0'>"+"<scr"+"ipt type='text/javascript'>atOptions = {'key' : 'd86c83ab7da8bf147b87f388c2f1522d','format' : 'iframe','height' : 90,'width' : 728,'params' : {}};document.write('<scr' + 'ipt type=\"text/javascript\" src=\"http' + (location.protocol === 'https:' ? 's' : '') + '://www.bcloudhost.com/d86c83ab7da8bf147b87f388c2f1522d/invoke.js\"></scr' + 'ipt>');</scr"+"ipt>"+"</body></html>");
   doc.close();
+
 
   var secondsElem = $("#propose-upgrade-seconds-remaining");
   var initial = secondsElem.html();

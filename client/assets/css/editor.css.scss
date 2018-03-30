@@ -671,7 +671,7 @@ li a.btn-primary {
 
 [name=propose-upgrade] {
   .modal-dialog {
-    width:650px;
+    width:775px;
   }
   .modal-footer {
     display:none;
@@ -684,4 +684,7 @@ li a.btn-primary {
   .action-btn-container {
     text-align:center;
   } 
+  hr {
+    margin:0;
+  }
 }
